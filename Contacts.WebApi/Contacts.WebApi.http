@@ -1,0 +1,21 @@
+#@Contacts.WebApi_HostAddress = https://localhost:7134
+@Contacts.WebApi_HostAddress = https://localhost:7134
+
+###
+POST {{Contacts.WebApi_HostAddress}}/api/Contacts/Search
+Content-Type: application/json
+
+{
+  "searchTerm": "Joh",
+  "sortBy": "Name",
+  "sortAsc": true,
+  "pageSize": 10,
+  "pageNumber": 1
+}
+
+###
+
+@id=0
+DELETE {{Contacts.WebApi_HostAddress}}/api/contacts/{{id}}
+
+###

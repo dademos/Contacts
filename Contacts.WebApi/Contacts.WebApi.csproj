@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Disables NuGet security auditing for transitive dependencies -->
+	<NuGetAuditMode>direct</NuGetAuditMode>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
+    <PackageReference Include="Riok.Mapperly" Version="4.3.1" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.18.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Contacts.Common\Contacts.Common.csproj" />
+    <ProjectReference Include="..\Contacts.Data\Contacts.Data.csproj" />
+    <ProjectReference Include="..\Contacts.Services.Contracts\Contacts.Services.Contracts.csproj" />
+    <ProjectReference Include="..\Contacts.Services\Contacts.Services.csproj" />
+  </ItemGroup>
+
+</Project>

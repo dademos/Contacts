@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="Contacts.Common/Contacts.Common.csproj" Id="5761826c-b6ce-441c-aca2-8f2113fc216b" />
+  <Project Path="Contacts.Data/Contacts.Data.csproj" />
+  <Project Path="Contacts.Services.Contracts/Contacts.Services.Contracts.csproj" />
+  <Project Path="Contacts.Services.Tests/Contacts.Services.Tests.csproj" Id="afde6680-77f2-4a18-b92a-54e01acd782e" />
+  <Project Path="Contacts.Services/Contacts.Services.csproj" />
+  <Project Path="Contacts.WebApi/Contacts.WebApi.csproj" />
+</Solution>

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Contacts.Services.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="35.6.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.13" />
+    <ProjectReference Include="..\Contacts.Common\Contacts.Common.csproj" />
+    <ProjectReference Include="..\Contacts.Data\Contacts.Data.csproj" />
+    <ProjectReference Include="..\Contacts.Services.Contracts\Contacts.Services.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

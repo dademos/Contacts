@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>{{ options.title }}</h2>
+
+<mat-dialog-content>
+  @if (options.message) {
+    <h3>{{ options.message }}</h3>
+  }
+  @if (options.details) {
+    <p>{{ options.details }}</p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button matButton matDialogClose>{{ options.noText }}</button>
+  <button matButton="filled" [class.button-filled-danger]="options.yesDanger" matDialogClose="true">
+    {{ options.yesText }}
+  </button>
+</mat-dialog-actions>

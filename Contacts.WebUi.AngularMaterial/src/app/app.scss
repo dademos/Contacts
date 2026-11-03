@@ -1,0 +1,10 @@
+header,
+main {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+a.link-active {
+  font-weight: 600;
+  color: var(--mat-sys-primary);
+}

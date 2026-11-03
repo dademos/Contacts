@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>{{ editMode ? 'Edit contact' : 'Add new contact' }}</h2>
+
+<form [formRoot]="contactForm">
+  <mat-dialog-content class="vertical-form">
+    <mat-form-field>
+      <mat-label>First name</mat-label>
+      <input matInput [formField]="contactForm.firstName" />
+      @for (error of contactForm.firstName().errors(); track error.kind) {
+        <mat-error>{{ error.message }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Last name</mat-label>
+      <input matInput [formField]="contactForm.lastName" />
+      @for (error of contactForm.lastName().errors(); track error.kind) {
+        <mat-error>{{ error.message }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input type="email" matInput [formField]="contactForm.email" />
+      @for (error of contactForm.email().errors(); track error.kind) {
+        <mat-error>{{ error.message }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Mobile phone</mat-label>
+      <input type="tel" matInput [formField]="contactForm.phone" />
+      <mat-hint>Either email or phone must be provided</mat-hint>
+      @for (error of contactForm.phone().errors(); track error.kind) {
+        <mat-error>{{ error.message }}</mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button matButton type="button" matDialogClose>Cancel</button>
+    <button matButton="filled" [disabled]="contactForm().submitting()">
+      @if (contactForm().submitting()) {
+        <mat-spinner diameter="24" />
+      } @else {
+        Save
+      }
+    </button>
+  </mat-dialog-actions>
+</form>
