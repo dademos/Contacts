@@ -29,5 +29,5 @@ steps:
       failTaskOnFailedTests: true
       testRunTitle: .NET tests
 
-  - script: dotnet ef migrations has-pending-model-changes --project Contacts.Data --no-build
+  - script: dotnet ef migrations has-pending-model-changes --project Contacts.Data --configuration Release --no-build
     displayName: Check for pending EF model changes

@@ -5,6 +5,7 @@ steps:
       { curl -fsSL https://get.pnpm.io/ -o /tmp/pnpm-install.sh \
         || curl -fsSL https://github.com/pnpm/get.pnpm.io/releases/latest/download/install.sh -o /tmp/pnpm-install.sh; } \
         && sh /tmp/pnpm-install.sh
+      export PATH="$PNPM_HOME/bin:$PATH"
       echo "##vso[task.prependpath]$PNPM_HOME/bin"
       "$PNPM_HOME/bin/pnpm" runtime set node lts -g
     displayName: Install pnpm and Node.js LTS
