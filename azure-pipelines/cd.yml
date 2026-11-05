@@ -1,0 +1,47 @@
+trigger: none
+
+pr: none
+
+resources:
+  pipelines:
+    - pipeline: ci
+      source: Contacts-CI
+      trigger:
+        branches:
+          include:
+            - main
+
+stages:
+  - stage: Deploy
+    displayName: Deploy to production
+    jobs:
+      - deployment: DeployApp
+        displayName: Deploy App
+        environment: production
+        pool:
+          vmImage: ubuntu-latest
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: ci
+                  artifact: ef-bundle
+
+                - download: ci
+                  artifact: app
+
+                - bash: |
+                    chmod +x "$(Pipeline.Workspace)/ci/ef-bundle/efbundle.exe"
+                    "$(Pipeline.Workspace)/ci/ef-bundle/efbundle.exe" -v -- "$DB_CONNECTION_STRING"
+                  displayName: Apply EF migrations
+                  env:
+                    DB_CONNECTION_STRING: $(dbConnectionString)
+
+                - task: AzureWebApp@1
+                  displayName: Deploy app to Azure App Service
+                  inputs:
+                    azureSubscription: $(azureServiceConnection)
+                    appName: Contacts
+                    package: '$(Pipeline.Workspace)/ci/app/Contacts.WebApi.zip'
+                    appType: webApp
+                    deploymentMethod: runFromPackage

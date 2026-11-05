@@ -1,0 +1,22 @@
+trigger: none
+
+pr:
+  branches:
+    include:
+      - main
+
+jobs:
+  - job: BuildAndTestDotNet
+    displayName: Build and test .NET
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: templates/steps-build-backend.yml
+
+  - job: BuildAndTestAngular
+    displayName: Build and test Angular
+    dependsOn: []
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: templates/steps-build-angular.yml

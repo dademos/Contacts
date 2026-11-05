@@ -1,5 +1,16 @@
 <Solution>
+  <Folder Name="/azure-pipelines/">
+    <File Path="azure-pipelines/cd.yml" />
+    <File Path="azure-pipelines/ci.yml" />
+    <File Path="azure-pipelines/pr.yml" />
+  </Folder>
+  <Folder Name="/azure-pipelines/templates/">
+    <File Path="azure-pipelines/templates/steps-build-angular.yml" />
+    <File Path="azure-pipelines/templates/steps-build-backend.yml" />
+  </Folder>
   <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="dotnet-tools.json" />
     <File Path="README.md" />
   </Folder>
   <Project Path="Contacts.Common/Contacts.Common.csproj" Id="5761826c-b6ce-441c-aca2-8f2113fc216b" />

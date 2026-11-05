@@ -1,0 +1,33 @@
+steps:
+  - checkout: self
+
+  - task: UseDotNet@2
+    displayName: Install .NET 10 SDK
+    inputs:
+      packageType: sdk
+      version: 10.x
+
+  - script: dotnet restore Contacts.slnx
+    displayName: Restore .NET solution
+
+  - script: dotnet tool restore
+    displayName: Restore .NET tools (dotnet-ef)
+
+  - script: dotnet build Contacts.slnx --configuration Release --no-restore
+    displayName: Build .NET solution
+
+  - script: dotnet test Contacts.slnx --configuration Release --no-build --no-restore --logger trx --results-directory $(Agent.TempDirectory)/TestResults
+    displayName: Run .NET tests
+
+  - task: PublishTestResults@2
+    displayName: Publish .NET test results
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: VSTest
+      testResultsFiles: '$(Agent.TempDirectory)/TestResults/**/*.trx'
+      mergeTestResults: true
+      failTaskOnFailedTests: true
+      testRunTitle: .NET tests
+
+  - script: dotnet ef migrations has-pending-model-changes --project Contacts.Data --no-build
+    displayName: Check for pending EF model changes

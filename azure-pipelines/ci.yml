@@ -1,0 +1,92 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pr: none
+
+jobs:
+  - job: BuildAndTestDotNet
+    displayName: Build and test .NET
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: templates/steps-build-backend.yml
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish API project artifact
+        inputs:
+          targetPath: Contacts.WebApi
+          artifact: Contacts.WebApi
+
+      - bash: |
+          mkdir -p "$(Build.ArtifactStagingDirectory)/ef-bundle"
+          dotnet ef migrations bundle --configuration Release --project Contacts.Data --no-build \
+            --target-runtime linux-x64 --self-contained --output "$(Build.ArtifactStagingDirectory)/ef-bundle/efbundle.exe"
+        displayName: Build EF migrations bundle
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish EF migrations bundle
+        inputs:
+          targetPath: '$(Build.ArtifactStagingDirectory)/ef-bundle'
+          artifact: ef-bundle
+
+  - job: BuildAndTestAngular
+    displayName: Build and test Angular
+    dependsOn: []
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: templates/steps-build-angular.yml
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish Angular build artifact
+        inputs:
+          targetPath: Contacts.WebUi.AngularMaterial/dist/contacts/browser
+          artifact: angular
+
+  - job: PackageApp
+    displayName: Package app
+    dependsOn:
+      - BuildAndTestDotNet
+      - BuildAndTestAngular
+    condition: succeeded()
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - checkout: self
+
+      - task: DownloadPipelineArtifact@2
+        displayName: Download API project artifact
+        inputs:
+          artifact: Contacts.WebApi
+          path: '$(Build.SourcesDirectory)/Contacts.WebApi'
+
+      - download: current
+        artifact: angular
+        displayName: Download Angular build
+
+      - bash: |
+          mkdir -p Contacts.WebApi/wwwroot
+          cp -a "$(Pipeline.Workspace)/angular/." Contacts.WebApi/wwwroot/
+        displayName: Copy Angular app into API wwwroot
+
+      - task: UseDotNet@2
+        displayName: Install .NET 10 SDK
+        inputs:
+          packageType: sdk
+          version: 10.x
+
+      - task: DotNetCoreCLI@2
+        displayName: Publish and zip the app
+        inputs:
+          command: publish
+          projects: Contacts.WebApi/Contacts.WebApi.csproj
+          arguments: '--configuration Release --output $(Pipeline.Workspace)/app'
+          publishWebProjects: false
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish app artifact
+        inputs:
+          targetPath: '$(Pipeline.Workspace)/app'
+          artifact: app

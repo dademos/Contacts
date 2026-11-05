@@ -1,0 +1,41 @@
+steps:
+  - checkout: self
+
+  - bash: |
+      { curl -fsSL https://get.pnpm.io/ -o /tmp/pnpm-install.sh \
+        || curl -fsSL https://github.com/pnpm/get.pnpm.io/releases/latest/download/install.sh -o /tmp/pnpm-install.sh; } \
+        && sh /tmp/pnpm-install.sh
+      echo "##vso[task.prependpath]$PNPM_HOME/bin"
+      "$PNPM_HOME/bin/pnpm" runtime set node lts -g
+    displayName: Install pnpm and Node.js LTS
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm
+
+  - bash: pnpm install --frozen-lockfile
+    displayName: Install Angular dependencies
+    workingDirectory: Contacts.WebUi.AngularMaterial
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm
+
+  - bash: pnpm test-ci
+    displayName: Run Angular unit tests
+    workingDirectory: Contacts.WebUi.AngularMaterial
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm
+
+  - task: PublishTestResults@2
+    displayName: Publish Angular test results
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: 'test-results/junit.xml'
+      searchFolder: '$(System.DefaultWorkingDirectory)/Contacts.WebUi.AngularMaterial'
+      mergeTestResults: true
+      failTaskOnFailedTests: true
+      testRunTitle: Angular unit tests
+
+  - bash: pnpm build
+    displayName: Build Angular app
+    workingDirectory: Contacts.WebUi.AngularMaterial
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm
