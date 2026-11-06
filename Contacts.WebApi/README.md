@@ -2,7 +2,7 @@
 
 ## Application structure
 
-The backend is built using ASP.NET Web API v10 backed up by an MS SQL database with Entity Framework
+The backend is built using ASP.NET Web API v10 backed up by an MS SQL (Azure) database with Entity Framework
 code first migrations.
 
 It's structured as a classic tiered clean architecture with separate projects for the lean controller 
@@ -22,7 +22,8 @@ a SPA that checked those specifically? I haven't.
 
 ## OpenAPI UI
 
-There's an [OpenAPI UI](/scalar) for the Web API if you want to play with it and maybe try API model 
+There's an [OpenAPI UI](https://contacts-dghjcuhtaqejbnd7.australiaeast-01.azurewebsites.net/scalar/) 
+for the Web API if you want to play with it and maybe try API model 
 validation in action. As a side note, frontend also does client side form validation. 
 Normally I wouldn't expose the OpenAPI spec for a non-public API in production, 
 but I did it for the sake of this demo.
