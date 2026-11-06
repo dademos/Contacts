@@ -26,9 +26,11 @@ stages:
               steps:
                 - download: ci
                   artifact: ef-bundle
+                  displayName: Download EF migrations bundle
 
                 - download: ci
                   artifact: app
+                  displayName: Download app
 
                 - bash: |
                     chmod +x "$(Pipeline.Workspace)/ci/ef-bundle/efbundle.exe"
