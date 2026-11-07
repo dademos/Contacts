@@ -14,17 +14,16 @@ interface INotificationOptions {
 }
 
 interface IRequestOptions extends INotificationOptions {
-  headers?: HttpHeaders | IHeaders;
-  params?: HttpParams | IParams; // Query string parameters
+  headers?: HttpHeaders | Headers;
+  params?: HttpParams | Params; // Query string parameters
 }
 
-interface IHeaders {
-  [header: string]: string | string[];
-}
+type Headers = Record<string, string | string[]>;
 
-interface IParams {
-  [param: string]: string | number | false | true | readonly (string | number | false | true)[];
-}
+type Params = Record<
+  string,
+  string | number | false | true | readonly (string | number | false | true)[]
+>;
 
 @Service()
 export class ApiService {
@@ -45,6 +44,7 @@ export class ApiService {
       .pipe(this.tapResponse(ops));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   post<T>(path: string, body?: any, options?: IRequestOptions): Observable<T> {
     const ops = { ...this._defaultOptions, ...options };
 
@@ -53,6 +53,7 @@ export class ApiService {
       .pipe(this.tapResponse(ops));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   put<T>(path: string, body?: any, options?: IRequestOptions): Observable<T> {
     const ops = { ...this._defaultOptions, ...options };
 
@@ -74,8 +75,8 @@ export class ApiService {
   }
 
   private extendOptions(options: IRequestOptions): {
-    headers?: HttpHeaders | IHeaders;
-    params?: HttpParams | IParams;
+    headers?: HttpHeaders | Headers;
+    params?: HttpParams | Params;
     observe?: 'body';
     responseType?: 'json';
   } {

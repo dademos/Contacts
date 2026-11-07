@@ -2,6 +2,8 @@
 
 # vitest Junit reporter output
 /test-results/
+# ESLint Junit output
+/lint-results/
 
 # Compiled output
 /dist

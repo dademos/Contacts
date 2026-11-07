@@ -56,10 +56,9 @@ describe('ApiService', () => {
 
     it('on error', () => {
       const loading = signal(false);
+      const errorHandler = vi.fn();
 
-      sut.get('test', { loading }).subscribe({
-        error: () => {},
-      });
+      sut.get('test', { loading }).subscribe({ error: errorHandler });
 
       // Request started
       expect(loading()).toBe(true);
@@ -76,6 +75,7 @@ describe('ApiService', () => {
 
       // Request completed with an error
       expect(loading()).toBe(false);
+      expect(errorHandler).toHaveBeenCalledOnce();
     });
   });
 
@@ -168,9 +168,7 @@ describe('ApiService', () => {
       Email: ['Invalid email address'],
     };
 
-    sut.post('test', { email: 'abc' }).subscribe({
-      error: () => {},
-    });
+    sut.post('test', { email: 'abc' }).subscribe({ error: vi.fn() });
 
     const req = httpMock.expectOne(`${environment.apiUrl}test`);
 
@@ -201,9 +199,7 @@ describe('ApiService', () => {
         expectedMessage: 'Custom error message',
       },
     ])('$description', ({ options, expectedMessage }) => {
-      sut.get('test', options).subscribe({
-        error: () => {},
-      });
+      sut.get('test', options).subscribe({ error: vi.fn() });
 
       const req = httpMock.expectOne(`${environment.apiUrl}test`);
 
@@ -223,9 +219,7 @@ describe('ApiService', () => {
   });
 
   it('doesn`t show error notification when showError=false', () => {
-    sut.get('test', { showError: false }).subscribe({
-      error: () => {},
-    });
+    sut.get('test', { showError: false }).subscribe({ error: vi.fn() });
 
     const req = httpMock.expectOne(`${environment.apiUrl}test`);
 
