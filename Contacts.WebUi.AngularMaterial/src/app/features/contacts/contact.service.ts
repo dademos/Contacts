@@ -1,10 +1,10 @@
 import { ApiService } from '../../common/services/api.service';
-import { inject, Service, WritableSignal } from '@angular/core';
+import { inject, WritableSignal, Injectable } from '@angular/core';
 import { SortedPageSearchRequest, PageResult } from '../../common/models/paging';
 import { ContactSortBy, ContactResponse, ContactRequest } from './models';
 import { Observable } from 'rxjs';
 
-@Service()
+@Injectable()
 export class ContactService {
   private readonly _apiService = inject(ApiService);
 

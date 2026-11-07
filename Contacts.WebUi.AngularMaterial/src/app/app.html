@@ -1,4 +1,10 @@
 <header>
+  <div class="progress-bar-container">
+    @if (router.currentNavigation()) {
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    }
+  </div>
+
   <mat-toolbar>
     <a
       mat-button
