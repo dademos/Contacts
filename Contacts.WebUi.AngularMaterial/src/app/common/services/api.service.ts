@@ -89,20 +89,17 @@ export class ApiService {
     return tap<T>({
       next: () => this.onSuccess(options),
       error: (error) => this.onError(error, options),
+      finalize: () => options.loading?.set(false),
     });
   }
 
   private onSuccess(options: IRequestOptions): void {
-    options.loading?.set(false);
-
     if (options.showSuccess) {
       this._notificationService.showSuccessBar(options.successMessage!);
     }
   }
 
   private onError(response: HttpErrorResponse, options: IRequestOptions): void {
-    options.loading?.set(false);
-
     if (options.showError) {
       let message = options.errorMessage;
 

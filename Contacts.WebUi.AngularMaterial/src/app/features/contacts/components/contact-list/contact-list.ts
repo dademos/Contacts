@@ -60,13 +60,11 @@ export class ContactList {
   readonly totalCount = signal(0);
 
   constructor() {
-    // This effect prevents table rows disappearing while paginating or sorting
+    // This effect prevents table rows from disappearing while paginating or sorting (i.e. while resource is loading)
     effect(() => {
-      const result = this.contactsResource.value();
-
-      if (result) {
-        this.contacts.set(result.items);
-        this.totalCount.set(result.totalCount);
+      if (this.contactsResource.hasValue()) {
+        this.contacts.set(this.contactsResource.value().items);
+        this.totalCount.set(this.contactsResource.value().totalCount);
       }
     });
   }
