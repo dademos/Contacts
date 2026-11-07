@@ -18,6 +18,22 @@ steps:
     env:
       PNPM_HOME: $(Pipeline.Workspace)/.pnpm
 
+  - bash: pnpm lint-ci
+    displayName: Lint Angular code
+    workingDirectory: Contacts.WebUi.AngularMaterial
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm
+
+  - task: PublishTestResults@2
+    displayName: Publish Angular lint results
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: 'lint-results/junit.xml'
+      searchFolder: '$(System.DefaultWorkingDirectory)/Contacts.WebUi.AngularMaterial'
+      failTaskOnFailedTests: true
+      testRunTitle: Angular lint results
+
   - bash: pnpm test-ci
     displayName: Run Angular unit tests
     workingDirectory: Contacts.WebUi.AngularMaterial
@@ -31,7 +47,6 @@ steps:
       testResultsFormat: JUnit
       testResultsFiles: 'test-results/junit.xml'
       searchFolder: '$(System.DefaultWorkingDirectory)/Contacts.WebUi.AngularMaterial'
-      mergeTestResults: true
       failTaskOnFailedTests: true
       testRunTitle: Angular unit tests
 
