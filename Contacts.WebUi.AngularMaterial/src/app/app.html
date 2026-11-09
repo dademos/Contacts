@@ -6,17 +6,23 @@
   </div>
 
   <mat-toolbar>
-    <a
-      mat-button
-      routerLink="/"
-      routerLinkActive="link-active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      ariaCurrentWhenActive="page"
-      >About</a
-    >
-    <a mat-button routerLink="/contacts" routerLinkActive="link-active" ariaCurrentWhenActive="page"
-      >Contacts</a
-    >
+    <nav>
+      <a
+        mat-button
+        routerLink="/"
+        routerLinkActive="link-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
+        >About</a
+      >
+      <a
+        mat-button
+        routerLink="/contacts"
+        routerLinkActive="link-active"
+        ariaCurrentWhenActive="page"
+        >Contacts</a
+      >
+    </nav>
   </mat-toolbar>
 </header>
 

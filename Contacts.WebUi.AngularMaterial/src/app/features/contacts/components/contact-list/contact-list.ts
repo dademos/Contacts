@@ -1,4 +1,4 @@
-import { Component, signal, inject, effect } from '@angular/core';
+import { Component, signal, inject, effect, ViewContainerRef } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -36,6 +36,7 @@ export class ContactList {
   private readonly _notificationService = inject(NotificationService);
   private readonly _contactService = inject(ContactService);
   private readonly _dialog = inject(MatDialog);
+  private readonly viewContainerRef = inject(ViewContainerRef);
 
   readonly displayedColumns: string[] = ['name', 'email', 'phone', 'actions'];
   readonly searchTerm = signal<string | null>(null);
@@ -95,6 +96,7 @@ export class ContactList {
       .open(ContactEdit, {
         width: DialogWidth.md,
         data: contact,
+        viewContainerRef: this.viewContainerRef,
       })
       .afterClosed()
       .subscribe((result: ContactResponse | null) => {
