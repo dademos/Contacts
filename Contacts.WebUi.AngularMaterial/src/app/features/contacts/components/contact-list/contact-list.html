@@ -78,13 +78,15 @@
     <div class="empty-result">No contacts match your search term.</div>
   }
 
-  <mat-paginator
-    [length]="totalCount()"
-    [pageSize]="pageSize()"
-    [pageIndex]="pageIndex()"
-    [pageSizeOptions]="[10, 15, 20, 25, 30, 50]"
-    (page)="onPage($event)"
-    showFirstLastButtons="true"
-    [disabled]="contactsResource.isLoading()"
-  />
+  @if (contacts().length) {
+    <mat-paginator
+      [length]="totalCount()"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      [pageSizeOptions]="[10, 15, 20, 25, 30, 50]"
+      (page)="onPage($event)"
+      showFirstLastButtons="true"
+      [disabled]="contactsResource.isLoading()"
+    />
+  }
 </div>
