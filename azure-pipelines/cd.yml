@@ -43,7 +43,7 @@ stages:
                   displayName: Deploy app to Azure App Service
                   inputs:
                     azureSubscription: $(azureServiceConnection)
-                    appName: Contacts
+                    appName: $(appServiceName)
                     package: '$(Pipeline.Workspace)/ci/app/Contacts.WebApi.zip'
                     appType: webApp
                     deploymentMethod: runFromPackage

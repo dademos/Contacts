@@ -27,4 +27,4 @@ Everything is deployed to Azure via Azure DevOps pipelines,
 including application of DB migrations. 
 The pipelines also run units tests for both frontend and backend. 
 Angular frontend is deplyed to the same Azure App Service as the API.
-The app is available at [https://contacts-dghjcuhtaqejbnd7.australiaeast-01.azurewebsites.net/](https://contacts-dghjcuhtaqejbnd7.australiaeast-01.azurewebsites.net/).
+The app is available at [https://contactsdemo-fab2esdtdjcvgyad.australiaeast-01.azurewebsites.net/](https://contactsdemo-fab2esdtdjcvgyad.australiaeast-01.azurewebsites.net/).
