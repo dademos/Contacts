@@ -38,7 +38,7 @@ export class NotificationService {
     };
 
     const dialogRef = this._dialog.open(ConfirmDialog, {
-      maxWidth: DialogWidth.lg,
+      maxWidth: DialogWidth.md,
       data,
     });
 

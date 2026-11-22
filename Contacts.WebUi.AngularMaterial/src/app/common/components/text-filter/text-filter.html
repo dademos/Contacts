@@ -6,7 +6,7 @@
     [disabled]="disabled()"
     [value]="text()"
     (input)="text.set($any($event.target).value)"
-    (keyup.enter)="onEnter()"
+    (keyup.enter)="onEnter($event)"
   />
   @if (text()) {
     <button
@@ -18,7 +18,7 @@
       (click)="onClear()"
       aria-label="Clear filter"
     >
-      <mat-icon>close</mat-icon>
+      <mat-icon aria-hidden="true">close</mat-icon>
     </button>
   }
 </mat-form-field>

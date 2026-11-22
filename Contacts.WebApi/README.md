@@ -22,7 +22,7 @@ a SPA that checked those specifically? I haven't.
 
 ## OpenAPI UI
 
-There's an [OpenAPI UI](https://contacts-dghjcuhtaqejbnd7.australiaeast-01.azurewebsites.net/scalar/) 
+There's an [OpenAPI UI](https://contactsdemo-fab2esdtdjcvgyad.australiaeast-01.azurewebsites.net/scalar/) 
 for the Web API if you want to play with it and maybe try API model 
 validation in action. As a side note, frontend also does client side form validation. 
 Normally I wouldn't expose the OpenAPI spec for a non-public API in production, 

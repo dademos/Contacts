@@ -12,29 +12,25 @@ steps:
     env:
       PNPM_HOME: $(Pipeline.Workspace)/.pnpm
 
-  - bash: pnpm install --frozen-lockfile
+  - bash: pnpm ci
     displayName: Install Angular dependencies
     workingDirectory: Contacts.WebUi.AngularMaterial
     env:
       PNPM_HOME: $(Pipeline.Workspace)/.pnpm
 
-  - bash: pnpm lint-ci
+  - bash: pnpm lint
     displayName: Lint Angular code
     workingDirectory: Contacts.WebUi.AngularMaterial
     env:
       PNPM_HOME: $(Pipeline.Workspace)/.pnpm
 
-  - task: PublishTestResults@2
-    displayName: Publish Angular lint results
-    condition: succeededOrFailed()
-    inputs:
-      testResultsFormat: JUnit
-      testResultsFiles: 'lint-results/junit.xml'
-      searchFolder: '$(System.DefaultWorkingDirectory)/Contacts.WebUi.AngularMaterial'
-      failTaskOnFailedTests: true
-      testRunTitle: Angular lint results
+  - bash: pnpm typecheck
+    displayName: Typecheck Angular code
+    workingDirectory: Contacts.WebUi.AngularMaterial
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm
 
-  - bash: pnpm test-ci
+  - bash: pnpm test:ci
     displayName: Run Angular unit tests
     workingDirectory: Contacts.WebUi.AngularMaterial
     env:

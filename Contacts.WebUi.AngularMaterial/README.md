@@ -12,13 +12,16 @@ including signal based forms.
 to optionally:
 - specify whether they want to show success and/or error toasts (by default error toasts are shown, but success toasts are not)
 - customise both types of messages for any request
-- choose to show error messages from the web API
+- choose to show error messages from the backend (default behaviour)
 - add additional HTTP headers to any request (e.g. when calling 3rd party APIs)
 - pass a UI layer loading signal which the service will automatically trigger on before sending a request and off
 when request completes (or fails)
 
-Angular `httpResource` is not used in this app, though [`ContactList`](./src/app/features/contacts/components/contact-list/contact-list.ts) 
-component shows how `rxResource` can be used for reads with the `ApiService`.
+The only success toast in the app is shown when a new contact is created. To see an error toast try saving a contact with a 
+duplicate email or phone. That will show an error message from the backend (it enforces email and phone uniqueness on DB level). 
+
+Angular `httpResource` is not used in this app, but [`ContactList`](./src/app/features/contacts/components/contact-list/contact-list.ts) 
+component uses `rxResource` for reads with the `ApiService`.
 
 ### TextFilter
 

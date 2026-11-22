@@ -136,4 +136,13 @@ describe('TextFilter', () => {
 
     expect(emitSpy).not.toHaveBeenCalled();
   });
+
+  it('does not emit a value on mount', async () => {
+    const emitSpy = vi.fn();
+    sut.value.subscribe(emitSpy);
+
+    await advanceTime(400);
+
+    expect(emitSpy).not.toHaveBeenCalled();
+  });
 });

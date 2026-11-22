@@ -109,14 +109,19 @@ export class ContactList {
   onDelete(contact: ContactResponse) {
     this._notificationService
       .ifConfirmed({
-        message: 'Are you sure you want to delete this contact?',
+        message: `Are you sure you want to delete ${contact.fullName}?`,
         details: 'This cannot be undone.',
         yesDanger: true,
       })
       .subscribe(() =>
-        this._contactService
-          .delete(contact.id, this.mutationLoading)
-          .subscribe(() => this.contactsResource.reload()),
+        this._contactService.delete(contact.id, this.mutationLoading).subscribe(() => {
+          if (this.pageIndex() > 0 && this.pageSize() * this.pageIndex() + 1 == this.totalCount()) {
+            // The deleted contact was whe only one on the last page, so go to the previous page
+            this.pageIndex.update((current) => current - 1);
+          } else {
+            this.contactsResource.reload();
+          }
+        }),
       );
   }
 

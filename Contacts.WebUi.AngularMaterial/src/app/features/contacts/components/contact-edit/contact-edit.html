@@ -38,9 +38,14 @@
 
   <mat-dialog-actions>
     <button matButton type="button" matDialogClose>Cancel</button>
-    <button matButton="filled" [disabled]="contactForm().submitting()">
+    <button
+      matButton="filled"
+      [disabled]="contactForm().submitting()"
+      [aria-busy]="contactForm().submitting()"
+      aria-label="Save"
+    >
       @if (contactForm().submitting()) {
-        <mat-spinner diameter="24" />
+        <mat-spinner diameter="24" aria-hidden="true" />
       } @else {
         Save
       }
