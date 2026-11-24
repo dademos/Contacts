@@ -12,9 +12,9 @@ sometimes helps to avoid circular dependencies.
 
 ## API endpoint structure
 
-The API endpoint structure is of pragmatic internal type in a sense that it doesn't strive to stricly adhere 
+The API endpoint structure is of pragmatic internal type in a sense that it doesn't strive to strictly adhere 
 to all REST conventions (in contrast to a public API, that should). It does so for the 
-convencence of both frontend and backend developers. Specifically this API:
+convenience of both frontend and backend developers. Specifically this API:
 - Only uses 200 success status code. No 201 for created or 204 for no content, etc. - have you ever seen 
 a SPA that checked those specifically? I haven't.
 - Doesn't return location headers for created resources.
@@ -40,6 +40,6 @@ which, in addition to the standard exception message, also provide 2 things:
 
 They can be thrown anywhere in the app without having to pass various failure result states up
 the call stack all the way to the controllers. 
-[`ExceptionHandlingMiddleware`](./Middleware/ExceptionHandlingMiddleware.cs) then uses them to contstruct
+[`ExceptionHandlingMiddleware`](./Middleware/ExceptionHandlingMiddleware.cs) then uses them to construct
 standard `ProblemDetails` responses with appropriate status codes and `Detail` messages.
 

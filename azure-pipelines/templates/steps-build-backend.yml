@@ -2,10 +2,10 @@ steps:
   - checkout: self
 
   - task: UseDotNet@2
-    displayName: Install .NET 10 SDK
+    displayName: Install .NET SDK
     inputs:
-      packageType: sdk
-      version: 10.x
+      useGlobalJson: true
+      checkForExistingVersion: true
 
   - script: dotnet restore Contacts.slnx
     displayName: Restore .NET solution
@@ -24,7 +24,7 @@ steps:
     condition: succeededOrFailed()
     inputs:
       testResultsFormat: VSTest
-      testResultsFiles: '$(Agent.TempDirectory)/TestResults/**/*.trx'
+      testResultsFiles: $(Agent.TempDirectory)/TestResults/**/*.trx
       mergeTestResults: true
       failTaskOnFailedTests: true
       testRunTitle: .NET tests

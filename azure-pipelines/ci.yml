@@ -14,7 +14,7 @@ jobs:
       - template: templates/steps-build-backend.yml
 
       - task: PublishPipelineArtifact@1
-        displayName: Publish API project artifact
+        displayName: Publish API project artefact
         inputs:
           targetPath: Contacts.WebApi
           artifact: Contacts.WebApi
@@ -26,9 +26,9 @@ jobs:
         displayName: Build EF migrations bundle
 
       - task: PublishPipelineArtifact@1
-        displayName: Publish EF migrations bundle
+        displayName: Publish EF migrations bundle artefact
         inputs:
-          targetPath: '$(Build.ArtifactStagingDirectory)/ef-bundle'
+          targetPath: $(Build.ArtifactStagingDirectory)/ef-bundle
           artifact: ef-bundle
 
   - job: BuildAndTestAngular
@@ -40,13 +40,27 @@ jobs:
       - template: templates/steps-build-angular.yml
 
       - task: PublishPipelineArtifact@1
-        displayName: Publish Angular build artifact
+        displayName: Publish Angular build artefact
         inputs:
           targetPath: Contacts.WebUi.AngularMaterial/dist/contacts/browser
           artifact: angular
 
+  - job: BuildAndTestReact
+    displayName: Build and test React
+    dependsOn: []
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: templates/steps-build-react.yml
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish React build artefact
+        inputs:
+          targetPath: Contacts.WebUi.ReactShadcn/dist
+          artifact: react
+
   - job: PackageApp
-    displayName: Package app
+    displayName: Package API & Angular app
     dependsOn:
       - BuildAndTestDotNet
       - BuildAndTestAngular
@@ -57,14 +71,14 @@ jobs:
       - checkout: self
 
       - task: DownloadPipelineArtifact@2
-        displayName: Download API project artifact
+        displayName: Download API project artefact
         inputs:
           artifact: Contacts.WebApi
-          path: '$(Build.SourcesDirectory)/Contacts.WebApi'
+          path: $(Build.SourcesDirectory)/Contacts.WebApi
 
       - download: current
         artifact: angular
-        displayName: Download Angular build
+        displayName: Download Angular build artefact
 
       - bash: |
           mkdir -p Contacts.WebApi/wwwroot
@@ -72,21 +86,21 @@ jobs:
         displayName: Copy Angular app into API wwwroot
 
       - task: UseDotNet@2
-        displayName: Install .NET 10 SDK
+        displayName: Install .NET SDK
         inputs:
-          packageType: sdk
-          version: 10.x
+          useGlobalJson: true
+          checkForExistingVersion: true
 
       - task: DotNetCoreCLI@2
-        displayName: Publish and zip the app
+        displayName: Publish and zip API & Angular app
         inputs:
           command: publish
           projects: Contacts.WebApi/Contacts.WebApi.csproj
-          arguments: '--configuration Release --output $(Pipeline.Workspace)/app'
+          arguments: --configuration Release --output $(Pipeline.Workspace)/app
           publishWebProjects: false
 
       - task: PublishPipelineArtifact@1
-        displayName: Publish app artifact
+        displayName: Publish API & Angular app artefact
         inputs:
-          targetPath: '$(Pipeline.Workspace)/app'
+          targetPath: $(Pipeline.Workspace)/app
           artifact: app
