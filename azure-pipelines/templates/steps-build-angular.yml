@@ -41,8 +41,8 @@ steps:
     condition: succeededOrFailed()
     inputs:
       testResultsFormat: JUnit
-      testResultsFiles: 'test-results/junit.xml'
-      searchFolder: '$(System.DefaultWorkingDirectory)/Contacts.WebUi.AngularMaterial'
+      testResultsFiles: test-results/junit.xml
+      searchFolder: $(System.DefaultWorkingDirectory)/Contacts.WebUi.AngularMaterial
       failTaskOnFailedTests: true
       testRunTitle: Angular unit tests
 

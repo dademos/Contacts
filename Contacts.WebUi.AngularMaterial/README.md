@@ -1,6 +1,6 @@
 # Angular frontend for Contacts Demo app
 
-This frontend is built with Angular Material - a corporate classic (although not my personal favorite).
+This frontend is built with Angular Material - a corporate classic (although not my personal favourite).
 Implementation takes advantage of Angular evolution and uses modern approach of standalone components with signals, 
 including signal based forms.
 
@@ -17,8 +17,12 @@ to optionally:
 - pass a UI layer loading signal which the service will automatically trigger on before sending a request and off
 when request completes (or fails)
 
-The only success toast in the app is shown when a new contact is created. To see an error toast try saving a contact with a 
-duplicate email or phone. That will show an error message from the backend (it enforces email and phone uniqueness on DB level). 
+Some may say it's an ugly violation of single responsibility principle. I say it allows for very concise
+easy to read code in other layers of the app.
+
+The only success toast in the app is shown when a new contact is created (see [`ContactService`](./src/app/features/contacts/contact.service.ts)).
+To see an error toast try saving a contact with a duplicate email or phone. 
+That will show an error message from the backend (it enforces email and phone uniqueness on DB level). 
 
 Angular `httpResource` is not used in this app, but [`ContactList`](./src/app/features/contacts/components/contact-list/contact-list.ts) 
 component uses `rxResource` for reads with the `ApiService`.

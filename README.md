@@ -9,7 +9,7 @@ AI assisted development.
 
 Throughout the prorcess of working on a demo app like this, there's an **ongoing** dilema of where to
 draw the line between it being a demo and trying to demonstrate how I'd do thing in a real world app.
-So with that in mind, here's a disclaimer: not everything here is done in a way I'd do it an
+So with that in mind, here's a disclaimer: not everything here is done in a way I'd do it in an
 enterprise app.
 
 ## Backend
@@ -18,13 +18,20 @@ The backend is built using ASP.NET Web API and SQL Server, see this [README](./C
 
 ## Frontend
 
-Frontend is built with Angular Material, see the corresponding 
+There are 2 functionally equivalent SPA frontends for this app.
+One is built with Angular Material, see the corresponding 
 [README](./Contacts.WebUi.AngularMaterial/README.md).
+The other is built with React shadcn/ui, see the corresponding 
+[README](./Contacts.WebUi.ReactShadcn/README.md).
 
 ## Hosting and deployment
 
 Everything is deployed to Azure via Azure DevOps pipelines, 
 including application of DB migrations. 
 The pipelines also run units tests for both frontend and backend. 
-Angular frontend is deplyed to the same Azure App Service as the API.
-The app is available at [https://contactsdemo-fab2esdtdjcvgyad.australiaeast-01.azurewebsites.net/](https://contactsdemo-fab2esdtdjcvgyad.australiaeast-01.azurewebsites.net/).
+
+Angular frontend is deplyed to the same Azure App Service as the API and is available at
+[https://contactsdemo-fab2esdtdjcvgyad.australiaeast-01.azurewebsites.net/](https://contactsdemo-fab2esdtdjcvgyad.australiaeast-01.azurewebsites.net/).
+
+React frontend is deplyed as an Azure Static Web App and is avalable at 
+[https://white-meadow-0dac27d00.3.azurestaticapps.net/](https://white-meadow-0dac27d00.3.azurestaticapps.net/).

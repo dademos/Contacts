@@ -1,0 +1,53 @@
+steps:
+  - checkout: self
+
+  - bash: |
+      { curl -fsSL https://get.pnpm.io/ -o /tmp/pnpm-install.sh \
+        || curl -fsSL https://github.com/pnpm/get.pnpm.io/releases/latest/download/install.sh -o /tmp/pnpm-install.sh; } \
+        && sh /tmp/pnpm-install.sh
+      export PATH="$PNPM_HOME/bin:$PATH"
+      echo "##vso[task.prependpath]$PNPM_HOME/bin"
+      "$PNPM_HOME/bin/pnpm" runtime set node lts -g
+    displayName: Install pnpm and Node.js LTS
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm
+
+  - bash: pnpm ci
+    displayName: Install React dependencies
+    workingDirectory: Contacts.WebUi.ReactShadcn
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm
+
+  - bash: pnpm check:ci
+    displayName: Check React code with Biome
+    workingDirectory: Contacts.WebUi.ReactShadcn
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm
+
+  - bash: pnpm typecheck
+    displayName: Typecheck React code
+    workingDirectory: Contacts.WebUi.ReactShadcn
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm
+
+  - bash: pnpm test1
+    displayName: Run React unit tests
+    workingDirectory: Contacts.WebUi.ReactShadcn
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm
+
+  - task: PublishTestResults@2
+    displayName: Publish React test results
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: test-results/junit.xml
+      searchFolder: $(System.DefaultWorkingDirectory)/Contacts.WebUi.ReactShadcn
+      failTaskOnFailedTests: true
+      testRunTitle: React unit tests
+
+  - bash: pnpm build
+    displayName: Build React app
+    workingDirectory: Contacts.WebUi.ReactShadcn
+    env:
+      PNPM_HOME: $(Pipeline.Workspace)/.pnpm

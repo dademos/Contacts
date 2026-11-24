@@ -26,11 +26,15 @@ stages:
               steps:
                 - download: ci
                   artifact: ef-bundle
-                  displayName: Download EF migrations bundle
+                  displayName: Download EF migrations bundle artefact
 
                 - download: ci
                   artifact: app
-                  displayName: Download app
+                  displayName: Download API & Angular app artefact
+
+                - download: ci
+                  artifact: react
+                  displayName: Download React app artefact
 
                 - bash: |
                     chmod +x "$(Pipeline.Workspace)/ci/ef-bundle/efbundle.exe"
@@ -40,10 +44,21 @@ stages:
                     DB_CONNECTION_STRING: $(dbConnectionString)
 
                 - task: AzureWebApp@1
-                  displayName: Deploy app to Azure App Service
+                  displayName: Deploy API & Angular app to Azure App Service
                   inputs:
                     azureSubscription: $(azureServiceConnection)
                     appName: $(appServiceName)
-                    package: '$(Pipeline.Workspace)/ci/app/Contacts.WebApi.zip'
+                    package: $(Pipeline.Workspace)/ci/app/Contacts.WebApi.zip
                     appType: webApp
                     deploymentMethod: runFromPackage
+
+                - task: AzureStaticWebApp@0
+                  displayName: Deploy React app to Azure Static Web Apps
+                  inputs:
+                    azure_static_web_apps_api_token: $(reactSwaDeploymentToken)
+                    app_location: ''
+                    api_location: ''
+                    output_location: ''
+                    skip_app_build: true
+                    skip_api_build: true
+                    workingDirectory: $(Pipeline.Workspace)/ci/react

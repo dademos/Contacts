@@ -20,3 +20,11 @@ jobs:
       vmImage: ubuntu-latest
     steps:
       - template: templates/steps-build-angular.yml
+
+  - job: BuildAndTestReact
+    displayName: Build and test React
+    dependsOn: []
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: templates/steps-build-react.yml

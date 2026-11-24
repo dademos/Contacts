@@ -1,0 +1,18 @@
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+.env
+.nitro
+.tanstack
+.wrangler
+.output
+.vinxi
+/.vitest/
+__unconfig*
+todos.json
+/AGENTS.md
+/.skills/
+# vitest Junit reporter output
+/test-results/
