@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
 import { DialogCloseButton } from '#/common/components/dialog-close-button';
 import { SubmitButton } from '#/common/components/form/submit-button';
@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '#/common/components/ui/dialog';
+import { contactEditDialogHandle } from '#/features/contacts/components/contact-edit-dialog-handle';
 import { contactsApi } from '#/features/contacts/lib/contacts-api';
 import type {
   ContactRequest,
@@ -49,17 +50,35 @@ const contactSchema = z
     }
   });
 
-type ContactEditProps = {
+export function ContactEdit() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Dialog handle={contactEditDialogHandle} onOpenChange={setOpen}>
+      {({ payload }) => (
+        <ContactEditDialogContent contact={payload ?? null} open={open} />
+      )}
+    </Dialog>
+  );
+}
+
+function ContactEditDialogContent({
+  contact,
+  open,
+}: {
   contact: ContactResponse | null;
   open: boolean;
-  onOpenChange: (open: boolean) => void;
-};
-export function ContactEdit({ contact, open, onOpenChange }: ContactEditProps) {
+}) {
   const createMutation = useMutation(contactsApi.create());
   const updateMutation = useMutation(contactsApi.update());
 
   const form = useAppForm({
-    defaultValues: {} as Required<Omit<ContactRequest, 'id'>>,
+    defaultValues: {
+      firstName: contact?.firstName ?? '',
+      lastName: contact?.lastName ?? '',
+      email: contact?.email ?? '',
+      phone: contact?.phone ?? '',
+    },
     validators: {
       onChange: contactSchema,
     },
@@ -78,7 +97,7 @@ export function ContactEdit({ contact, open, onOpenChange }: ContactEditProps) {
         await createMutation.mutateAsync(request);
       }
 
-      onOpenChange(false);
+      contactEditDialogHandle.close();
     },
   });
 
@@ -94,54 +113,52 @@ export function ContactEdit({ contact, open, onOpenChange }: ContactEditProps) {
   }, [open, contact, form.reset]);
 
   return (
-    <Dialog open={open} onOpenChange={(nextOpen) => onOpenChange(nextOpen)}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {contact ? 'Edit contact' : 'Add new contact'}
-          </DialogTitle>
-        </DialogHeader>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>
+          {contact ? 'Edit contact' : 'Add new contact'}
+        </DialogTitle>
+      </DialogHeader>
 
-        <form
-          noValidate
-          id={form.formId}
-          className="flex flex-col gap-4"
-          onSubmit={(event) => {
-            event.preventDefault();
-            void form.handleSubmit();
-          }}
-        >
-          <form.AppField name="firstName">
-            {(field) => (
-              <field.TextField label="First name" maxLength={50} required />
-            )}
-          </form.AppField>
-          <form.AppField name="lastName">
-            {(field) => <field.TextField label="Last name" maxLength={50} />}
-          </form.AppField>
-          <form.AppField name="email">
-            {(field) => (
-              <field.TextField
-                label="Email"
-                type="email"
-                maxLength={254}
-                description="Either email or phone must be provided"
-              />
-            )}
-          </form.AppField>
-          <form.AppField name="phone">
-            {(field) => (
-              <field.TextField label="Mobile phone" type="tel" maxLength={10} />
-            )}
-          </form.AppField>
-        </form>
+      <form
+        noValidate
+        id={form.formId}
+        className="flex flex-col gap-4"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+      >
+        <form.AppField name="firstName">
+          {(field) => (
+            <field.TextField label="First name" maxLength={50} required />
+          )}
+        </form.AppField>
+        <form.AppField name="lastName">
+          {(field) => <field.TextField label="Last name" maxLength={50} />}
+        </form.AppField>
+        <form.AppField name="email">
+          {(field) => (
+            <field.TextField
+              label="Email"
+              type="email"
+              maxLength={254}
+              description="Either email or phone must be provided"
+            />
+          )}
+        </form.AppField>
+        <form.AppField name="phone">
+          {(field) => (
+            <field.TextField label="Mobile phone" type="tel" maxLength={10} />
+          )}
+        </form.AppField>
+      </form>
 
-        <DialogFooter>
-          <DialogCloseButton />
+      <DialogFooter>
+        <DialogCloseButton />
 
-          <SubmitButton formApi={form} />
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <SubmitButton formApi={form} />
+      </DialogFooter>
+    </DialogContent>
   );
 }

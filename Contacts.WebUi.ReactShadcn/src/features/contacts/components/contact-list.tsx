@@ -23,6 +23,7 @@ import { TableHeadSortButton } from '#/common/components/table/table-head-sort-b
 import { getAriaSort } from '#/common/components/table/utils';
 import { TextFilter } from '#/common/components/text-filter';
 import { Button } from '#/common/components/ui/button';
+import { DialogTrigger } from '#/common/components/ui/dialog';
 import {
   Table,
   TableBody,
@@ -40,6 +41,7 @@ import {
 import { useConfirm } from '#/common/providers/confirm-dialog/use-confirm-dialog';
 import type { SortedPageSearchRequest } from '#/common/types/paging';
 import { ContactEdit } from '#/features/contacts/components/contact-edit';
+import { contactEditDialogHandle } from '#/features/contacts/components/contact-edit-dialog-handle';
 import { contactsApi } from '#/features/contacts/lib/contacts-api';
 import { type ContactResponse, ContactSortBy } from '#/features/contacts/types';
 
@@ -62,10 +64,6 @@ export function ContactList() {
     pageIndex: 0,
     pageSize: 15,
   });
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [contactToEdit, setContactToEdit] = useState<ContactResponse | null>(
-    null,
-  );
   const confirm = useConfirm();
 
   const request: SortedPageSearchRequest<ContactSortBy> = {
@@ -108,16 +106,6 @@ export function ContactList() {
     }
   }
 
-  function onCreate() {
-    setContactToEdit(null);
-    setEditDialogOpen(true);
-  }
-
-  function onEdit(contact: ContactResponse) {
-    setContactToEdit(contact);
-    setEditDialogOpen(true);
-  }
-
   const columns = columnHelper.columns([
     columnHelper.accessor('fullName', {
       id: ContactSortBy.name,
@@ -152,16 +140,21 @@ export function ContactList() {
           <Tooltip>
             <TooltipTrigger
               render={
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label="Add new contact"
-                  disabled={isMutating}
-                  onClick={onCreate}
-                >
-                  <UserPlusIcon />
-                </Button>
+                <DialogTrigger
+                  handle={contactEditDialogHandle}
+                  payload={null}
+                  render={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label="Add new contact"
+                      disabled={isMutating}
+                    >
+                      <UserPlusIcon />
+                    </Button>
+                  }
+                />
               }
             />
             <TooltipContent>Add new contact</TooltipContent>
@@ -196,16 +189,21 @@ export function ContactList() {
           <Tooltip>
             <TooltipTrigger
               render={
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label={`Edit ${row.original.fullName}`}
-                  disabled={isMutating}
-                  onClick={() => onEdit(row.original)}
-                >
-                  <PencilIcon />
-                </Button>
+                <DialogTrigger
+                  handle={contactEditDialogHandle}
+                  payload={row.original}
+                  render={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label={`Edit ${row.original.fullName}`}
+                      disabled={isMutating}
+                    >
+                      <PencilIcon />
+                    </Button>
+                  }
+                />
               }
             />
             <TooltipContent>Edit</TooltipContent>
@@ -328,11 +326,7 @@ export function ContactList() {
         <Paginator table={table} />
       )}
 
-      <ContactEdit
-        contact={contactToEdit}
-        open={editDialogOpen}
-        onOpenChange={setEditDialogOpen}
-      />
+      <ContactEdit />
     </div>
   );
 }

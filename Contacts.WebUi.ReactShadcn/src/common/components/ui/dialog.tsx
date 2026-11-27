@@ -5,11 +5,11 @@ import { cn } from "cn"
 import { Button } from "@/common/components/ui/button"
 import { XIcon } from "lucide-react"
 
-function Dialog({ ...props }: DialogPrimitive.Root.Props) {
+function Dialog<Payload>({ ...props }: DialogPrimitive.Root.Props<Payload>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
 }
 
-function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {
+function DialogTrigger<Payload>({ ...props }: DialogPrimitive.Trigger.Props<Payload>) {
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
 }
 
